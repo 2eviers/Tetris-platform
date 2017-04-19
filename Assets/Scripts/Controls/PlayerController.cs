@@ -4,16 +4,19 @@ public class PlayerController : MonoBehaviour
 {
     #region Serialize Fields
 
-    [SerializeField] private float _HorizontalCoeffcient;
-    [SerializeField] private float _JumpCoefficient;
+    [SerializeField]
+    private float _HorizontalCoeffcient;
 
-    #endregion
+    [SerializeField]
+    private float _JumpCoefficient;
+
+    #endregion Serialize Fields
 
     #region Fields
 
     private Rigidbody _rigidbody;
 
-    #endregion
+    #endregion Fields
 
     #region Unity Callbacks
 
@@ -31,9 +34,13 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
     }
 
-    #endregion
+    ////A REFACTO surement
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    Vector3
+    //}
 
+    #endregion Unity Callbacks
 }
