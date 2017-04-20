@@ -5,16 +5,22 @@ public class PlayerController2D : MonoBehaviour
     #region Serialize Fields
 
     [SerializeField]
-    private float _HorizontalCoeffcient;
+    private float _maxSpeed;
+
+    [SerializeField]
+    private float _groundMoveForce;
+
+    [SerializeField]
+    private float _airMoveForce;
 
     [SerializeField]
     private float _floorJumpForce;
 
     [SerializeField]
-    private float _wallJumpForce;
+    private float _wallJumpUpForce;
 
     [SerializeField]
-    private float _yolo;
+    private float _wallJumpRightForce;
 
     #endregion Serialize Fields
 
@@ -44,75 +50,23 @@ public class PlayerController2D : MonoBehaviour
 
     private void Update()
     {
-        _rigidbody.AddForce(Input.GetAxis("Horizontal") * _HorizontalCoeffcient * Vector2.right);
+        if (_onFloor)
+            _rigidbody.AddForce(Input.GetAxis("Horizontal") * _groundMoveForce * Vector2.right);
+        else
+            _rigidbody.AddForce(Input.GetAxis("Horizontal") * _groundMoveForce * Vector2.right);
+       
 
         if (Input.GetKeyDown(KeyCode.Space))// A CHANGER
         {
             if (_onFloor)
                 _rigidbody.AddForce(Input.GetAxis("Jump") * _floorJumpForce * Vector2.up);
             else if (_onWall)
-                _rigidbody.AddForce(Input.GetAxis("Jump") * _wallJumpForce * Vector2.up - _wallDirection * _yolo * Vector2.right);
+                _rigidbody.AddForce(Input.GetAxis("Jump") * _wallJumpUpForce * Vector2.up - _wallDirection * _wallJumpRightForce * Vector2.right);        
         }
+
+        if(Mathf.Abs(_rigidbody.velocity.x) > _maxSpeed)
+            _rigidbody.velocity =  new Vector2(Mathf.Sign(_rigidbody.velocity.x) * _maxSpeed, _rigidbody.velocity.y);
     }
-
-    //private void FixedUpdate()
-    //{
-    //}
-
-    ////A REFACTO surement
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    ContactPoint2D firstContactPoint = collision.contacts[0];
-    //    ContactPoint2D lastContactPoint = collision.contacts[collision.contacts.Length - 1];
-
-    //    //boolean de contact a enlever avec collision exit
-
-    //    Debug.DrawLine(transform.position, firstContactPoint.point, Color.green, 1);
-    //    Debug.DrawLine(transform.position, lastContactPoint.point, Color.red, 1);
-
-    //    int result = FindContactType(firstContactPoint.point, lastContactPoint.point, (BoxCollider2D)collision.collider); // sinon void
-    //    if (result == 1)
-    //        _onFloor = true;
-    //    else if (result == 2)
-    //        _onWall = true;
-    //}
-
-    //private void OnCollisionExit2D(Collision2D collision)
-    //{
-    //    _onWall = false;
-    //    _onFloor = false;
-    //}
-
-    //private void OnCollisionStay2D(Collision2D collision)
-    //{
-    //    ContactPoint2D firstContactPoint = collision.contacts[0];
-    //    ContactPoint2D lastContactPoint = collision.contacts[collision.contacts.Length - 1];
-    //    Debug.DrawLine(transform.position, firstContactPoint.point, Color.green);
-    //    Debug.DrawLine(transform.position, lastContactPoint.point, Color.red);
-    //}
-
-    //#endregion Unity Callbacks
-
-    //#region Private Methods
-
-    //private int FindContactType(Vector2 firstContactPoint, Vector2 lastContactPoint, BoxCollider2D selfCollider)
-    //{
-    //    float width = selfCollider.size.x;
-    //    float height = selfCollider.size.y;
-
-    //    float a = Mathf.Abs(firstContactPoint.x - transform.position.x);
-    //    float b = Mathf.Abs(lastContactPoint.x - transform.position.x);
-    //    float c = firstContactPoint.y - transform.position.y;
-    //    float d = lastContactPoint.y - transform.position.y;
-
-    //    if (c <= transform.position.y - height + 0.01f && d <= transform.position.y - height + 0.01f)
-    //        return 1;
-
-    //    if (a >= width - 0.01f && b >= width - 0.01f)
-    //        return 2;
-
-    //    return 0;
-    //}
-
+ 
     #endregion Unity Callbacks
 }
