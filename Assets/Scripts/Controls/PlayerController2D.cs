@@ -8,7 +8,13 @@ public class PlayerController2D : MonoBehaviour
     private float _HorizontalCoeffcient;
 
     [SerializeField]
-    private float _JumpCoefficient;
+    private float _floorJumpForce;
+
+    [SerializeField]
+    private float _wallJumpForce;
+
+    [SerializeField]
+    private float _yolo;
 
     #endregion Serialize Fields
 
@@ -17,6 +23,7 @@ public class PlayerController2D : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private bool _onFloor;
     private bool _onWall;
+    private int _wallDirection;
 
     #endregion Fields
 
@@ -24,6 +31,7 @@ public class PlayerController2D : MonoBehaviour
 
     public bool OnFloor { set { _onFloor = value; } }
     public bool OnWall { set { _onWall = value; } }
+    public int WallDirection { set { _wallDirection = value; } }
 
     #endregion Properties
 
@@ -38,10 +46,13 @@ public class PlayerController2D : MonoBehaviour
     {
         _rigidbody.AddForce(Input.GetAxis("Horizontal") * _HorizontalCoeffcient * Vector2.right);
 
-        if (Input.GetKeyDown(KeyCode.Space)) // A CHANGER
-            _rigidbody.AddForce(Input.GetAxis("Jump") * _JumpCoefficient * Vector2.up);
-
-        //Debug.Log("Floor : " + _onFloor + ", Wall : " + _onWall);
+        if (Input.GetKeyDown(KeyCode.Space))// A CHANGER
+        {
+            if (_onFloor)
+                _rigidbody.AddForce(Input.GetAxis("Jump") * _floorJumpForce * Vector2.up);
+            else if (_onWall)
+                _rigidbody.AddForce(Input.GetAxis("Jump") * _wallJumpForce * Vector2.up - _wallDirection * _yolo * Vector2.right);
+        }
     }
 
     //private void FixedUpdate()
