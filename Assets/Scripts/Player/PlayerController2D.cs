@@ -56,7 +56,7 @@ public class PlayerController2D : MonoBehaviour
             _rigidbody.AddForce(Input.GetAxis("Horizontal") * _groundMoveForce * Vector2.right);
        
 
-        if (Input.GetKeyDown(KeyCode.Space))// A CHANGER
+        if (Input.GetKeyDown(KeyCode.Space))//Changer
         {
             if (_onFloor)
                 _rigidbody.AddForce(Input.GetAxis("Jump") * _floorJumpForce * Vector2.up);
