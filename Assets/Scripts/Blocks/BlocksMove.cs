@@ -16,6 +16,7 @@ public class BlocksMove : MonoBehaviour {
 
     private bool _lockRotation;
     private float _targetRotation;
+    private Rigidbody2D _rigidbody;
 
     #endregion
 
@@ -23,13 +24,51 @@ public class BlocksMove : MonoBehaviour {
     
     //tant que le doigt bouge on vérifie le delta (direction) et on translate
 
+    private void Start()
+    {
+        _rigidbody = GetComponent<Rigidbody2D>();
+    }
+
     private void Update ()
     {
-        transform.Translate(_speed * Time.deltaTime * transform.InverseTransformDirection(- Vector3.up));
+        transform.Translate(_speed * Time.deltaTime * transform.InverseTransformDirection(-Vector3.up));
 
         if ((int)transform.rotation.eulerAngles.z != _targetRotation % 360)
             transform.Rotate(0, 0, _rotationSpeed * 0.1f);
+
+        if (Input.GetKeyDown(KeyCode.Return))
+            AddRotation();
 	}
+
+    //private void FixedUpdate()
+    //{
+    //    _rigidbody.MovePosition(_rigidbody.position - _speed * Vector2.up * Time.deltaTime);
+
+    //    if ((int)_rigidbody.rotation != _targetRotation % 360)
+    //        _rigidbody.MoveRotation(_rigidbody.rotation + _rotationSpeed * 0.1f);
+    //}
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Enter");
+
+        if (collision.collider.tag == "Block")
+        {
+            FixeTransform();
+            enabled = false;
+        }
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void FixeTransform()
+    {
+        int i = Mathf.RoundToInt(transform.rotation.eulerAngles.z / 90);
+        transform.rotation = Quaternion.Euler(0, 0, i * 90);     
+    }
 
     #endregion
 
