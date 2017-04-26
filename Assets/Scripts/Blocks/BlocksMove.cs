@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-public class BlocksMove : MonoBehaviour {
-
+public class BlocksMove : MonoBehaviour
+{
     #region Serialize Fields
 
     [SerializeField]
@@ -10,26 +10,26 @@ public class BlocksMove : MonoBehaviour {
     [SerializeField]
     private int _rotationSpeed;
 
-    #endregion
+    #endregion Serialize Fields
 
     #region Fields
 
     private bool _lockRotation;
     private float _targetRotation;
-    private Rigidbody2D _rigidbody;
+    //private Rigidbody2D _rigidbody;
 
-    #endregion
+    #endregion Fields
 
     #region Unity Callbacks
-    
+
     //tant que le doigt bouge on vérifie le delta (direction) et on translate
 
-    private void Start()
-    {
-        _rigidbody = GetComponent<Rigidbody2D>();
-    }
+    //private void Start()
+    //{
+    //    _rigidbody = GetComponent<Rigidbody2D>();
+    //}
 
-    private void Update ()
+    private void Update()
     {
         transform.Translate(_speed * Time.deltaTime * transform.InverseTransformDirection(-Vector3.up));
 
@@ -38,7 +38,7 @@ public class BlocksMove : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Return))
             AddRotation();
-	}
+    }
 
     //private void FixedUpdate()
     //{
@@ -48,11 +48,8 @@ public class BlocksMove : MonoBehaviour {
     //        _rigidbody.MoveRotation(_rigidbody.rotation + _rotationSpeed * 0.1f);
     //}
 
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Enter");
-
         if (collision.collider.tag == "Block")
         {
             FixeTransform();
@@ -60,17 +57,17 @@ public class BlocksMove : MonoBehaviour {
         }
     }
 
-    #endregion
+    #endregion Unity Callbacks
 
     #region Private Methods
 
     private void FixeTransform()
     {
         int i = Mathf.RoundToInt(transform.rotation.eulerAngles.z / 90);
-        transform.rotation = Quaternion.Euler(0, 0, i * 90);     
+        transform.rotation = Quaternion.Euler(0, 0, i * 90);
     }
 
-    #endregion
+    #endregion Private Methods
 
     #region Public Methods
 
@@ -79,6 +76,5 @@ public class BlocksMove : MonoBehaviour {
         _targetRotation += 90;
     }
 
-    #endregion
-
+    #endregion Public Methods
 }

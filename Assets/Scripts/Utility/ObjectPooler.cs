@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CarLabSimulation.Core
 {
@@ -27,7 +26,7 @@ namespace CarLabSimulation.Core
         private string _name;
 
         /// <summary>buffer where are stored the instances of the prefab</summary>
-        private List<GameObject> _buffer = new List<GameObject> { };
+        private Stack<GameObject> _buffer = new Stack<GameObject> { };
 
         #endregion Fields
 
@@ -67,7 +66,7 @@ namespace CarLabSimulation.Core
                 objectInstance.SetActive(false);
                 objectInstance.name = _name;
                 objectInstance.transform.SetParent(dynamicObjects.transform);
-                _buffer.Add(objectInstance);
+                _buffer.Push(objectInstance);
             }
         }
 
@@ -91,10 +90,7 @@ namespace CarLabSimulation.Core
         {
             GameObject objectInstance;
             if (_buffer.Count != 0)
-            {
-                objectInstance = _buffer.First();
-                _buffer.Remove(objectInstance);
-            }
+                objectInstance = _buffer.Pop();
             else
             {
                 objectInstance = Instantiate(_prefab);
@@ -113,7 +109,7 @@ namespace CarLabSimulation.Core
             if (objectInstance.name == _name)
             {
                 objectInstance.SetActive(false);
-                _buffer.Add(objectInstance);
+                _buffer.Push(objectInstance);
             }
             else
                 Debug.LogError("Object Pooler : " + _name + ", Wrong object");
