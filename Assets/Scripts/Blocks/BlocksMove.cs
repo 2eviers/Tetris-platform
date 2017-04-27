@@ -59,12 +59,16 @@ public class BlocksMove : MonoBehaviour
 
     #endregion Unity Callbacks
 
+    //Utiliser raycast all plus tard
+
     #region Private Methods
 
     private void FixeTransform()
     {
         int i = Mathf.RoundToInt(transform.rotation.eulerAngles.z / 90);
         transform.rotation = Quaternion.Euler(0, 0, i * 90);
+
+        transform.position = new Vector2(Mathf.RoundToInt(transform.position.x), transform.position.y);
     }
 
     #endregion Private Methods
